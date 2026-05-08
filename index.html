@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Padely — IA para tu pádel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #070B14;
+  --surface:  #0F1728;
+  --border:   #1E2D45;
+  --green:    #2196F3;
+  --accent:   #C8FF00;
+  --text:     #FFFFFF;
+  --muted:    #8899AA;
+  --dim:      rgba(255,255,255,0.6);
+}
+
+html { scroll-behavior: smooth; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(33,150,243,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(33,150,243,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ════════════════════════════ NAV ════════════════════════════ */
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  padding: 0 56px;
+  background: rgba(7,11,20,0.72);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.logo-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(200,255,0,0.35);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.logo-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.14em;
+  color: var(--text);
+}
+
+.lang-toggle {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 3px;
+  gap: 2px;
+}
+.lang-btn {
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.17s ease;
+}
+.lang-btn.active {
+  background: var(--green);
+  color: #FFFFFF;
+}
+.lang-btn:hover:not(.active) {
+  color: var(--text);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.btn-nav-dl {
+  padding: 9px 22px;
+  background: var(--green);
+  color: #FFFFFF;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.17s ease, transform 0.17s ease;
+}
+.btn-nav-dl:hover {
+  background: #42A5F5;
+  transform: translateY(-1px);
+}
+
+/* ════════════════════════════ HERO ════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(33,150,243,0.18) 0%, rgba(33,150,243,0.07) 42%, transparent 68%);
+  pointer-events: none; z-index: 0;
+}
+.hero-glow-tl {
+  position: absolute; left: -12%; top: -15%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(33,150,243,0.06) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 112px 56px 80px;
+  display: grid;
+  grid-template-columns: 52% 48%;
+  align-items: center;
+  gap: 40px;
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px 5px 7px;
+  background: rgba(200,255,0,0.08);
+  border: 1px solid rgba(200,255,0,0.28);
+  border-radius: 100px;
+  margin-bottom: 36px;
+  width: fit-content;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+.badge-dot {
+  width: 20px; height: 20px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 10px; color: #070B14;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(64px, 7vw, 88px);
+  line-height: 0.93;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+.hero-title .accent {
+  color: var(--green);
+  display: inline-block;
+}
+
+.hero-sub {
+  font-size: 17px;
+  line-height: 1.72;
+  color: var(--dim);
+  max-width: 430px;
+  margin-bottom: 44px;
+  font-weight: 400;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+
+.ctas {
+  display: flex;
+  gap: 13px;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.4s both;
+}
+
+.cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 22px;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  border: none;
+  cursor: pointer;
+}
+.cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 44px rgba(0,0,0,0.55);
+}
+
+.cta-apple {
+  background: #fff;
+  color: #070B14;
+}
+.cta-apple:hover {
+  background: #F2F2F7;
+}
+.cta-google {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.cta-google:hover {
+  border-color: rgba(255,255,255,0.18);
+}
+
+.cta-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+.cta-copy {
+  display: flex;
+  flex-direction: column;
+}
+.cta-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+.cta-name {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stats {
+  display: flex;
+  gap: 0;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.52s both;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.stat + .stat {
+  padding-left: 28px;
+  margin-left: 28px;
+  border-left: 1px solid var(--border);
+}
+.stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 46px;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: 0.03em;
+}
+.stat-val .green { color: var(--green); }
+.stat-lbl {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.hero-phones {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 680px;
+  opacity: 0;
+  animation: slidePhone 0.9s ease 0.25s both;
+}
+
+.phone-wrap {
+  position: relative;
+  width: 310px;
+}
+
+.phone-back {
+  position: absolute;
+  width: 255px;
+  top: 54px;
+  right: -62px;
+  transform: rotate(7deg);
+  opacity: 0.48;
+  filter: blur(1.5px);
+  display: block;
+  border-radius: 40px;
+}
+
+.phone-front {
+  position: relative;
+  z-index: 2;
+  width: 310px;
+  display: block;
+  animation: phoneFloat 5.5s ease-in-out infinite;
+  border-radius: 40px;
+}
+
+@keyframes phoneFloat {
+  0%, 100% {
+    transform: rotate(-2.5deg) translateY(0px);
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.72)) drop-shadow(0 0 44px rgba(33,150,243,0.12));
+  }
+  50% {
+    transform: rotate(-2.5deg) translateY(-18px);
+    filter: drop-shadow(0 52px 90px rgba(0,0,0,0.72)) drop-shadow(0 0 80px rgba(33,150,243,0.24));
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slidePhone {
+  from { opacity: 0; transform: translateX(36px) scale(0.96); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@media (max-width: 960px) {
+  nav { padding: 0 24px; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    padding: 100px 28px 64px;
+    text-align: center;
+  }
+  .badge          { margin-left: auto; margin-right: auto; }
+  .hero-sub       { margin-left: auto; margin-right: auto; }
+  .ctas           { justify-content: center; }
+  .stats          { justify-content: center; }
+  .hero-phones    { display: none; }
+}
+@media (max-width: 520px) {
+  nav { padding: 0 16px; }
+  .logo-name { font-size: 20px; }
+  .ctas { flex-direction: column; align-items: stretch; }
+  .cta-btn { justify-content: center; }
+  .hero-title { font-size: clamp(60px, 14vw, 80px); }
+}
+
+/* ════════════════════════════ SHARED SECTION ════════════════════════════ */
+.section { padding: 110px 0; position: relative; }
+.section-inner { max-width: 1280px; margin: 0 auto; padding: 0 56px; }
+.section-header { text-align: center; margin-bottom: 64px; }
+.section-eyebrow {
+  display: inline-block;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 0.96; letter-spacing: 0.01em; color: var(--text);
+}
+.reveal { opacity: 0; transform: translateY(28px) scale(0.98); transition: opacity 0.72s cubic-bezier(.22,1,.36,1), transform 0.72s cubic-bezier(.22,1,.36,1); }
+.reveal.in { opacity: 1; transform: translateY(0) scale(1); }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+
+/* ════════════════════════════ FEATURES ════════════════════════════ */
+.feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.feat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 22px; padding: 32px 26px;
+  transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
+}
+.feat-card:hover {
+  border-color: rgba(33,150,243,0.4); transform: translateY(-5px);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(33,150,243,0.1);
+}
+.feat-icon-wrap {
+  width: 48px; height: 48px; background: rgba(33,150,243,0.12);
+  border-radius: 13px; display: flex; align-items: center;
+  justify-content: center; margin-bottom: 22px;
+}
+.feat-icon-wrap svg {
+  width: 22px; height: 22px;
+  stroke: var(--green); fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+.feat-name { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -0.01em; }
+.feat-desc { font-size: 14px; line-height: 1.65; color: var(--dim); }
+
+/* ════════════════════════════ HOW IT WORKS ════════════════════════════ */
+.how { background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%); }
+.steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; position: relative; }
+.steps::before {
+  content: ''; position: absolute;
+  top: 42px; left: 22%; right: 22%;
+  border-top: 1.5px dashed rgba(33,150,243,0.3); pointer-events: none;
+}
+.step { text-align: center; }
+.step-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 80px; line-height: 1;
+  color: var(--green); letter-spacing: -0.02em; margin-bottom: 14px;
+  display: block; position: relative; z-index: 1;
+}
+.step-label { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: -0.01em; }
+.step-body { font-size: 14px; line-height: 1.68; color: var(--dim); max-width: 260px; margin: 0 auto; }
+
+/* ════════════════════════════ PRICING ════════════════════════════ */
+.plans { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; max-width: 820px; margin: 0 auto; }
+.plan {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; padding: 36px 32px;
+  display: flex; flex-direction: column; position: relative;
+  transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
+}
+.plan:not(.plan-pro):hover {
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 48px rgba(0,0,0,0.4);
+}
+.plan-pro {
+  border-color: rgba(33,150,243,0.4);
+  box-shadow: 0 0 0 1px rgba(33,150,243,0.1), 0 24px 64px rgba(0,0,0,0.4), 0 0 80px rgba(33,150,243,0.07);
+}
+.plan-pro:hover {
+  border-color: rgba(33,150,243,0.6);
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 1px rgba(33,150,243,0.16), 0 32px 72px rgba(0,0,0,0.5), 0 0 100px rgba(33,150,243,0.12);
+}
+.popular-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--green); color: #FFFFFF;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase;
+  padding: 5px 16px; border-radius: 100px; white-space: nowrap;
+}
+.plan-name { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.08em; color: var(--text); display: block; margin-bottom: 16px; }
+.plan-price-tagline {
+  font-size: 20px; font-weight: 700; color: var(--text);
+  line-height: 1.25; margin-bottom: 28px; letter-spacing: -0.02em;
+}
+.plan-pro .plan-price-tagline { color: var(--green); }
+.plan-feats { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 32px; flex: 1; }
+.plan-feats li { font-size: 14px; display: flex; align-items: center; gap: 10px; }
+.plan-feats li::before {
+  content: ''; width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+  background-repeat: no-repeat; background-position: center; background-size: 10px 10px;
+}
+.feat-yes { color: var(--text); }
+.feat-yes::before {
+  background-color: rgba(33,150,243,0.12);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 5l2.5 2.5L8 3' stroke='%232196F3' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.feat-no { color: var(--muted); }
+.feat-no::before {
+  background-color: rgba(255,255,255,0.04);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 3l4 4M7 3l-4 4' stroke='%235A6580' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+.plan-cta {
+  display: block; text-align: center; padding: 14px; border-radius: 12px;
+  font-size: 15px; font-weight: 700; text-decoration: none;
+  transition: transform 0.18s, box-shadow 0.18s; letter-spacing: 0.01em;
+}
+.plan-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.plan-cta-free { background: rgba(255,255,255,0.07); border: 1px solid var(--border); color: var(--text); }
+.plan-cta-free:hover { background: rgba(255,255,255,0.1); }
+.plan-cta-pro { background: var(--green); color: #FFFFFF; }
+.plan-cta-pro:hover { background: #42A5F5; }
+
+/* ════════════════════════════ FOOTER ════════════════════════════ */
+footer { border-top: 1px solid var(--border); padding: 40px 0; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.footer-links { position: static; display: flex; align-items: center; gap: 28px; }
+.footer-links a { font-size: 14px; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+.footer-links a:hover { color: var(--text); }
+.footer-copy { font-size: 13px; color: var(--muted); }
+
+@media (max-width: 960px) {
+  .section { padding: 80px 0; }
+  .section-inner { padding: 0 28px; }
+  .feat-grid { grid-template-columns: 1fr 1fr; }
+  .steps { grid-template-columns: 1fr; gap: 44px; }
+  .steps::before { display: none; }
+  .plans { grid-template-columns: 1fr; max-width: 420px; }
+  .footer-inner { flex-direction: column; text-align: center; gap: 16px; }
+  .footer-links { justify-content: center; }
+}
+@media (max-width: 520px) {
+  .feat-grid { grid-template-columns: 1fr; }
+  .stats { flex-wrap: wrap; row-gap: 20px; }
+  .stat { min-width: 45%; }
+  .stat + .stat { margin-left: 0; padding-left: 0; border-left: none; }
+  .stat:nth-child(2) { padding-left: 20px; margin-left: 0; border-left: 1px solid var(--border); }
+  .stat:last-child { width: 100%; padding-top: 20px; border-top: 1px solid var(--border); text-align: center; }
+  .hero-sub { font-size: 15px; }
+  .plan { padding: 28px 22px; }
+  .footer-copy { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo" aria-label="Padely">
+    <div class="logo-mark">
+      <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+        <defs><style>.jugador{fill:#fff}.raqueta{fill:#2196F3}.pelota{fill:#C8FF00}</style></defs>
+        <rect width="1024" height="1024" fill="#070B14" rx="200"/>
+        <g class="jugador"><ellipse cx="512" cy="280" rx="90" ry="95"/><path d="M512 400 L420 480 L380 700 L440 720 L480 500 L512 520 L544 500 L580 720 L640 700 L600 480 L644 400 Z" fill="#fff"/><rect x="350" y="450" width="50" height="250" rx="25" fill="#fff"/><rect x="624" y="450" width="50" height="250" rx="25" fill="#fff"/></g>
+        <ellipse cx="280" cy="350" rx="80" ry="100" class="raqueta" transform="rotate(-35 280 350)"/>
+        <circle cx="200" cy="280" r="25" class="pelota"/>
+        <path d="M 260 300 Q 240 320 220 340" stroke="#C8FF00" stroke-width="8" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="logo-name">PADELY</span>
+  </a>
+
+  <div class="nav-right">
+    <div class="lang-toggle" role="group" aria-label="Idioma">
+      <button class="lang-btn active" id="btnEs" onclick="setLang('es')">ES</button>
+      <button class="lang-btn"        id="btnEn" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="btn-nav-dl" id="navDl">Descargar</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"    aria-hidden="true"></div>
+  <div class="hero-glow-tl" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="badge">
+        <div class="badge-dot">✨</div>
+        <span class="badge-text" id="badgeText">IA para pádel</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span id="titleL1">MEJORÁ TU</span><br>
+        <span id="titleL2" class="accent">JUEGO</span><br>
+        <span id="titleL3">CON IA</span>
+      </h1>
+
+      <p class="hero-sub" id="heroSub">
+        Grabá tus golpes y recibí análisis detallados de tu técnica con inteligencia artificial. Seguí tu progreso, encontrá patrones y mejorá cada partido.
+      </p>
+
+      <div class="ctas">
+        <a href="https://apps.apple.com/app/padely" class="cta-btn cta-apple" target="_blank">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <div class="cta-copy">
+            <span class="cta-eyebrow" id="ctaEyebrow1">Descargar en</span>
+            <span class="cta-name">App Store</span>
+          </div>
+        </a>
+
+        <a href="https://play.google.com/store/apps/details?id=com.padely" class="cta-btn cta-google" target="_blank">
+          <svg class="cta-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.24.99.2l.11-.04L13.65 14 10 10.35 3.18 23.76zM20.96 10.24l-2.94-1.66-3.84 3.76 3.84 3.76 2.97-1.68c.85-.48.85-1.69-.03-2.18zM2.01 1.05c-.05.17-.08.36-.08.56v20.78c0 .2.03.39.08.56L12.47 12 2.01 1.05zM13.65 10 4.28.24l-.11-.04c-.35-.04-.69.03-.99.2L13.65 10z"/></svg>
+          <div class="cta-copy">
+            <span class="cta-eyebrow" id="ctaEyebrow2">Descargar en</span>
+            <span class="cta-name">Google Play</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="stats" id="statsRow">
+        <div class="stat">
+          <div class="stat-val"><span class="ctr" data-to="3.2" data-dec="1" data-suf="K+">3.2K+</span></div>
+          <div class="stat-lbl" id="stat1Lbl">Jugadores activos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val"><span class="ctr" data-to="18" data-dec="0" data-suf="K+">18K+</span></div>
+          <div class="stat-lbl" id="stat2Lbl">Análisis realizados</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val"><span class="ctr" data-to="4.9" data-dec="1" data-suf="">4.9</span><span class="green">★</span></div>
+          <div class="stat-lbl" id="stat3Lbl">Rating</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-phones" aria-hidden="true">
+      <div class="phone-wrap">
+        <img src="data:image/svg+xml,%3Csvg viewBox='0 0 320 640' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='320' height='640' fill='%230F1728' rx='40'/%3E%3Crect x='10' y='10' width='300' height='620' fill='%23070B14' rx='35'/%3E%3C/svg%3E" alt="" class="phone-back">
+        <img src="data:image/svg+xml,%3Csvg viewBox='0 0 320 640' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='320' height='640' fill='%230F1728' rx='40'/%3E%3Crect x='10' y='10' width='300' height='620' fill='%23070B14' rx='35'/%3E%3Ctext x='160' y='320' text-anchor='middle' fill='%232196F3' font-size='48' font-family='Bebas Neue' letter-spacing='2'%3EPADELY%3C/text%3E%3C/svg%3E" alt="Pantalla de análisis de golpe en Padely" class="phone-front">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section features" id="features">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <p class="section-eyebrow" id="featEyebrow">FUNCIONES</p>
+      <h2 class="section-title" id="featTitle">Todo lo que necesitás para crecer</h2>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon-wrap"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3 class="feat-name" id="feat1Name">Análisis con IA</h3>
+        <p class="feat-desc" id="feat1Desc">Subí el video de tu golpe y la IA detecta errores técnicos, timing y postura en segundos.</p>
+      </div>
+      <div class="feat-card reveal reveal-d1">
+        <div class="feat-icon-wrap"><svg viewBox="0 0 24 24"><polygon points="12,3 20.5,8 20.5,16 12,21 3.5,16 3.5,8"/><polygon points="12,7 16.5,10 16.5,14 12,17 7.5,14 7.5,10" stroke-opacity="0.45"/></svg></div>
+        <h3 class="feat-name" id="feat2Name">Radar de Progreso</h3>
+        <p class="feat-desc" id="feat2Desc">Visualizá tu nivel en cada golpe con un radar chart que se actualiza tras cada análisis.</p>
+      </div>
+      <div class="feat-card reveal reveal-d2">
+        <div class="feat-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><circle cx="8" cy="15.5" r="1" style="fill:var(--green);stroke:none;"/><circle cx="12" cy="15.5" r="1" style="fill:var(--green);stroke:none;"/><circle cx="16" cy="15.5" r="1" style="fill:var(--green);stroke:none;"/></svg></div>
+        <h3 class="feat-name" id="feat3Name">Diario de Partidos</h3>
+        <p class="feat-desc" id="feat3Desc">Registrá tus partidos, anotá notas y llevá un historial completo de tu evolución.</p>
+      </div>
+      <div class="feat-card reveal reveal-d3">
+        <div class="feat-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10.5 8.5l6 3.5-6 3.5z" style="fill:var(--green);stroke:none;"/></svg></div>
+        <h3 class="feat-name" id="feat4Name">Lecciones</h3>
+        <p class="feat-desc" id="feat4Desc">Accedé a lecciones personalizadas basadas en los puntos débiles que detectó la IA.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how" id="como-funciona">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <p class="section-eyebrow" id="howEyebrow">PROCESO</p>
+      <h2 class="section-title" id="howTitle">Cómo funciona</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="step-num">01</span>
+        <h3 class="step-label" id="step1Name">Grabá tu partido</h3>
+        <p class="step-body" id="step1Desc">Filmá tus golpes con cualquier cámara. Cuanto mejor el ángulo, mejor el análisis.</p>
+      </div>
+      <div class="step reveal reveal-d1">
+        <span class="step-num">02</span>
+        <h3 class="step-label" id="step2Name">La IA analiza tus golpes</h3>
+        <p class="step-body" id="step2Desc">Nuestra IA procesa el video y detecta más de 20 métricas técnicas en cada golpe.</p>
+      </div>
+      <div class="step reveal reveal-d2">
+        <span class="step-num">03</span>
+        <h3 class="step-label" id="step3Name">Mejorá con tu plan</h3>
+        <p class="step-body" id="step3Desc">Recibí ejercicios y lecciones específicas para tus debilidades. Semana a semana.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <p class="section-eyebrow" id="pricingEyebrow">PLANES</p>
+      <h2 class="section-title" id="pricingTitle">Empezá gratis, crecé sin límites</h2>
+    </div>
+    <div class="plans reveal">
+      <div class="plan">
+        <span class="plan-name" id="freeName">Free</span>
+        <div class="plan-price-tagline" id="freePriceTag">Para siempre gratis</div>
+        <ul class="plan-feats">
+          <li class="feat-yes" id="free1">2 análisis de IA por mes</li>
+          <li class="feat-yes" id="free2">Diario de partidos</li>
+          <li class="feat-yes" id="free3">Lecciones básicas</li>
+          <li class="feat-no" id="free4">Radar de progreso</li>
+          <li class="feat-no" id="free5">Análisis ilimitados</li>
+          <li class="feat-no" id="free6">Evolución histórica</li>
+        </ul>
+        <a href="#" class="plan-cta plan-cta-free" id="freeCtaLabel">Empezar gratis</a>
+      </div>
+      <div class="plan plan-pro">
+        <div class="popular-badge" id="popularBadge">Más popular</div>
+        <span class="plan-name" id="proName">Pro</span>
+        <div class="plan-price-tagline" id="proPriceTag">Empezá con 3 días gratis</div>
+        <ul class="plan-feats">
+          <li class="feat-yes" id="pro1">Análisis ilimitados</li>
+          <li class="feat-yes" id="pro2">Radar de progreso completo</li>
+          <li class="feat-yes" id="pro3">Evolución histórica</li>
+          <li class="feat-yes" id="pro4">Lecciones personalizadas</li>
+          <li class="feat-yes" id="pro5">Diario de partidos</li>
+          <li class="feat-yes" id="pro6">Soporte prioritario</li>
+        </ul>
+        <a href="#" class="plan-cta plan-cta-pro" id="proCtaLabel">Probar gratis 3 días</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="section-inner">
+    <div class="footer-inner">
+      <a href="index.html" class="logo" aria-label="Padely">
+        <div class="logo-mark">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+            <defs><style>.j{fill:#fff}.r{fill:#2196F3}.p{fill:#C8FF00}</style></defs>
+            <rect width="1024" height="1024" fill="#070B14" rx="200"/>
+            <g class="j"><ellipse cx="512" cy="280" rx="90" ry="95"/><path d="M512 400 L420 480 L380 700 L440 720 L480 500 L512 520 L544 500 L580 720 L640 700 L600 480 L644 400 Z" fill="#fff"/><rect x="350" y="450" width="50" height="250" rx="25" fill="#fff"/><rect x="624" y="450" width="50" height="250" rx="25" fill="#fff"/></g>
+            <ellipse cx="280" cy="350" rx="80" ry="100" class="r" transform="rotate(-35 280 350)"/>
+            <circle cx="200" cy="280" r="25" class="p"/>
+            <path d="M 260 300 Q 240 320 220 340" stroke="#C8FF00" stroke-width="8" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="logo-name">PADELY</span>
+      </a>
+      <nav class="footer-links">
+        <a href="privacidad.html" id="privacyLink">Privacidad</a>
+        <a href="terminos.html" id="termsLink">Términos</a>
+        <a href="mailto:contacto@padely.com" id="contactLink">Contacto</a>
+      </nav>
+      <p class="footer-copy" id="copyright">© 2025 Padely. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navEl = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  navEl.style.background = window.scrollY > 50
+    ? 'rgba(7,11,20,0.97)'
+    : 'rgba(7,11,20,0.72)';
+}, { passive: true });
+
+const T = {
+  es: {
+    badge:'IA para pádel', l1:'MEJORÁ TU', l2:'JUEGO', l3:'CON IA',
+    sub:'Grabá tus golpes y recibí análisis detallados de tu técnica con inteligencia artificial. Seguí tu progreso, encontrá patrones y mejorá cada partido.',
+    e1:'Descargar en', e2:'Descargar en', s1:'Jugadores activos', s2:'Análisis realizados', s3:'Rating', dl:'Descargar',
+    featEyebrow:'FUNCIONES', featTitle:'Todo lo que necesitás para crecer',
+    feat1Name:'Análisis con IA', feat1Desc:'Subí el video de tu golpe y la IA detecta errores técnicos, timing y postura en segundos.',
+    feat2Name:'Radar de Progreso', feat2Desc:'Visualizá tu nivel en cada golpe con un radar chart que se actualiza tras cada análisis.',
+    feat3Name:'Diario de Partidos', feat3Desc:'Registrá tus partidos, anotá notas y llevá un historial completo de tu evolución.',
+    feat4Name:'Lecciones', feat4Desc:'Accedé a lecciones personalizadas basadas en los puntos débiles que detectó la IA.',
+    howEyebrow:'PROCESO', howTitle:'Cómo funciona',
+    step1Name:'Grabá tu partido', step1Desc:'Filmá tus golpes con cualquier cámara. Cuanto mejor el ángulo, mejor el análisis.',
+    step2Name:'La IA analiza tus golpes', step2Desc:'Nuestra IA procesa el video y detecta más de 20 métricas técnicas en cada golpe.',
+    step3Name:'Mejorá con tu plan', step3Desc:'Recibí ejercicios y lecciones específicas para tus debilidades. Semana a semana.',
+    pricingEyebrow:'PLANES', pricingTitle:'Empezá gratis, crecé sin límites',
+    freeName:'Free', freePriceTag:'Para siempre gratis',
+    free1:'2 análisis de IA por mes', free2:'Diario de partidos', free3:'Lecciones básicas',
+    free4:'Radar de progreso', free5:'Análisis ilimitados', free6:'Evolución histórica',
+    freeCtaLabel:'Empezar gratis',
+    popularBadge:'Más popular', proName:'Pro', proPriceTag:'Empezá con 3 días gratis',
+    pro1:'Análisis ilimitados', pro2:'Radar de progreso completo', pro3:'Evolución histórica',
+    pro4:'Lecciones personalizadas', pro5:'Diario de partidos', pro6:'Soporte prioritario',
+    proCtaLabel:'Probar gratis 3 días',
+    privacyLink:'Privacidad', termsLink:'Términos', contactLink:'Contacto',
+    copyright:'© 2025 Padely. Todos los derechos reservados.',
+  },
+  en: {
+    badge:'AI for padel', l1:'LEVEL UP', l2:'YOUR GAME', l3:'WITH AI',
+    sub:'Record your shots and get in-depth AI technique analysis. Track your progress, spot patterns and improve with every match.',
+    e1:'Download on', e2:'Get it on', s1:'Active players', s2:'Analyses done', s3:'Rating', dl:'Download',
+    featEyebrow:'FEATURES', featTitle:'Everything you need to improve',
+    feat1Name:'AI Shot Analysis', feat1Desc:'Upload your shot video and AI instantly detects technique errors, timing issues and posture.',
+    feat2Name:'Progress Radar', feat2Desc:'See your level for each shot type in a radar chart that updates after each analysis.',
+    feat3Name:'Match Journal', feat3Desc:'Log your matches, add notes, and keep a full history of your weekly progression.',
+    feat4Name:'Lessons', feat4Desc:'Access personalized lessons based on the weak points identified by the AI.',
+    howEyebrow:'PROCESS', howTitle:'How it works',
+    step1Name:'Record your match', step1Desc:'Film your shots with any camera. The better the angle, the better the analysis.',
+    step2Name:'AI analyzes your shots', step2Desc:'Our AI processes the video and detects 20+ technical metrics per shot.',
+    step3Name:'Improve with your plan', step3Desc:'Receive targeted exercises and lessons for your weak points. Week after week.',
+    pricingEyebrow:'PRICING', pricingTitle:'Start free, grow without limits',
+    freeName:'Free', freePriceTag:'Free forever',
+    free1:'2 AI analyses per month', free2:'Match journal', free3:'Basic lessons',
+    free4:'Progress radar', free5:'Unlimited analyses', free6:'Historical evolution',
+    freeCtaLabel:'Get started free',
+    popularBadge:'Most popular', proName:'Pro', proPriceTag:'Start with 3 days free',
+    pro1:'Unlimited analyses', pro2:'Full progress radar', pro3:'Historical evolution',
+    pro4:'Personalized lessons', pro5:'Match journal', pro6:'Priority support',
+    proCtaLabel:'Try free for 3 days',
+    privacyLink:'Privacy', termsLink:'Terms', contactLink:'Contact',
+    copyright:'© 2025 Padely. All rights reserved.',
+  }
+};
+
+function setLang(lang) {
+  const d = T[lang];
+  document.getElementById('badgeText').textContent = d.badge;
+  document.getElementById('titleL1').textContent = d.l1;
+  document.getElementById('titleL2').textContent = d.l2;
+  document.getElementById('titleL3').textContent = d.l3;
+  document.getElementById('heroSub').textContent = d.sub;
+  document.getElementById('ctaEyebrow1').textContent = d.e1;
+  document.getElementById('ctaEyebrow2').textContent = d.e2;
+  document.getElementById('stat1Lbl').textContent = d.s1;
+  document.getElementById('stat2Lbl').textContent = d.s2;
+  document.getElementById('stat3Lbl').textContent = d.s3;
+  document.getElementById('navDl').textContent = d.dl;
+  document.getElementById('featEyebrow').textContent = d.featEyebrow;
+  document.getElementById('featTitle').textContent = d.featTitle;
+  document.getElementById('feat1Name').textContent = d.feat1Name;
+  document.getElementById('feat1Desc').textContent = d.feat1Desc;
+  document.getElementById('feat2Name').textContent = d.feat2Name;
+  document.getElementById('feat2Desc').textContent = d.feat2Desc;
+  document.getElementById('feat3Name').textContent = d.feat3Name;
+  document.getElementById('feat3Desc').textContent = d.feat3Desc;
+  document.getElementById('feat4Name').textContent = d.feat4Name;
+  document.getElementById('feat4Desc').textContent = d.feat4Desc;
+  document.getElementById('howEyebrow').textContent = d.howEyebrow;
+  document.getElementById('howTitle').textContent = d.howTitle;
+  document.getElementById('step1Name').textContent = d.step1Name;
+  document.getElementById('step1Desc').textContent = d.step1Desc;
+  document.getElementById('step2Name').textContent = d.step2Name;
+  document.getElementById('step2Desc').textContent = d.step2Desc;
+  document.getElementById('step3Name').textContent = d.step3Name;
+  document.getElementById('step3Desc').textContent = d.step3Desc;
+  document.getElementById('pricingEyebrow').textContent = d.pricingEyebrow;
+  document.getElementById('pricingTitle').textContent = d.pricingTitle;
+  document.getElementById('freeName').textContent = d.freeName;
+  document.getElementById('freePriceTag').textContent = d.freePriceTag;
+  document.getElementById('free1').textContent = d.free1;
+  document.getElementById('free2').textContent = d.free2;
+  document.getElementById('free3').textContent = d.free3;
+  document.getElementById('free4').textContent = d.free4;
+  document.getElementById('free5').textContent = d.free5;
+  document.getElementById('free6').textContent = d.free6;
+  document.getElementById('freeCtaLabel').textContent = d.freeCtaLabel;
+  document.getElementById('popularBadge').textContent = d.popularBadge;
+  document.getElementById('proName').textContent = d.proName;
+  document.getElementById('proPriceTag').textContent = d.proPriceTag;
+  document.getElementById('pro1').textContent = d.pro1;
+  document.getElementById('pro2').textContent = d.pro2;
+  document.getElementById('pro3').textContent = d.pro3;
+  document.getElementById('pro4').textContent = d.pro4;
+  document.getElementById('pro5').textContent = d.pro5;
+  document.getElementById('pro6').textContent = d.pro6;
+  document.getElementById('proCtaLabel').textContent = d.proCtaLabel;
+  document.getElementById('privacyLink').textContent = d.privacyLink;
+  document.getElementById('termsLink').textContent = d.termsLink;
+  document.getElementById('contactLink').textContent = d.contactLink;
+  document.getElementById('copyright').textContent = d.copyright;
+  document.getElementById('btnEs').classList.toggle('active', lang === 'es');
+  document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+}
+
+function runCounters() {
+  document.querySelectorAll('.ctr').forEach(el => {
+    const to = parseFloat(el.dataset.to), dec = parseInt(el.dataset.dec), suf = el.dataset.suf;
+    const dur = 1700, t0 = performance.now();
+    (function tick(now) {
+      const p = Math.min((now - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = (to * e).toFixed(dec) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    })(t0);
+  });
+}
+
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+const statsEl = document.getElementById('statsRow');
+new IntersectionObserver(([entry], obs) => {
+  if (!entry.isIntersecting) return;
+  runCounters(); obs.disconnect();
+}, { threshold: 0.5 }).observe(statsEl);
+</script>
+</body>
+</html>
