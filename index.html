@@ -637,21 +637,6 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
           </div>
         </a>
       </div>
-
-      <div class="stats" id="statsRow">
-        <div class="stat">
-          <div class="stat-val"><span class="ctr" data-to="3.2" data-dec="1" data-suf="K+">3.2K+</span></div>
-          <div class="stat-lbl" id="stat1Lbl">Jugadores activos</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val"><span class="ctr" data-to="18" data-dec="0" data-suf="K+">18K+</span></div>
-          <div class="stat-lbl" id="stat2Lbl">Análisis realizados</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val"><span class="ctr" data-to="4.9" data-dec="1" data-suf="">4.9</span><span class="green">★</span></div>
-          <div class="stat-lbl" id="stat3Lbl">Rating</div>
-        </div>
-      </div>
     </div>
 
     <div class="hero-phones" aria-hidden="true">
@@ -902,29 +887,11 @@ function setLang(lang) {
   document.documentElement.lang = lang;
 }
 
-function runCounters() {
-  document.querySelectorAll('.ctr').forEach(el => {
-    const to = parseFloat(el.dataset.to), dec = parseInt(el.dataset.dec), suf = el.dataset.suf;
-    const dur = 1700, t0 = performance.now();
-    (function tick(now) {
-      const p = Math.min((now - t0) / dur, 1);
-      const e = 1 - Math.pow(1 - p, 3);
-      el.textContent = (to * e).toFixed(dec) + suf;
-      if (p < 1) requestAnimationFrame(tick);
-    })(t0);
-  });
-}
-
 const revealObs = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-const statsEl = document.getElementById('statsRow');
-new IntersectionObserver(([entry], obs) => {
-  if (!entry.isIntersecting) return;
-  runCounters(); obs.disconnect();
-}, { threshold: 0.5 }).observe(statsEl);
 </script>
 </body>
 </html>
