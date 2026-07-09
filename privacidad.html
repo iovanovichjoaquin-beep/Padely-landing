@@ -310,7 +310,18 @@ footer {
     <h2 id="h12">12. Cambios en Esta Política</h2>
     <p id="p11">Podemos actualizar esta política. La versión vigente estará disponible en la App y en nuestro sitio web.</p>
 
-    <h2 id="h13">13. Contacto</h2>
+    <h2 id="h13b">13. Cómo Eliminar tu Cuenta</h2>
+    <p id="p12b">Podés eliminar tu cuenta de Padely y todos los datos asociados en cualquier momento, directamente desde la App, siguiendo estos pasos:</p>
+    <ol id="ol5">
+      <li id="li19">Iniciá sesión en la App Padely.</li>
+      <li id="li20">Andá a tu Perfil (ícono arriba a la derecha en Inicio).</li>
+      <li id="li21">Entrá a Configuración.</li>
+      <li id="li22">Tocá "Eliminar cuenta" y confirmá la acción.</li>
+    </ol>
+    <p id="p12c">Al eliminar tu cuenta se borran de forma inmediata e irreversible: tu perfil, historial de análisis de golpes, partidos registrados en el diario y datos de suscripción vinculados a tu identidad. Los registros de transacciones de suscripción pueden conservarse temporalmente cuando la ley lo exige por motivos contables o fiscales, sin vincularse a tu identidad activa en la App.</p>
+    <p id="p12d">Si no podés acceder a la App, también podés solicitar la eliminación escribiendo a <a href="mailto:iovanovichjoaquin@gmail.com" style="color: var(--green); text-decoration: none;">iovanovichjoaquin@gmail.com</a> desde el email asociado a tu cuenta.</p>
+
+    <h2 id="h13">14. Contacto</h2>
     <p id="p12">Para consultas sobre privacidad: <a href="mailto:iovanovichjoaquin@gmail.com" style="color: var(--green); text-decoration: none;">iovanovichjoaquin@gmail.com</a></p>
   </div>
 </div>
@@ -378,7 +389,15 @@ const T = {
     p10: 'No mostramos anuncios. No realizamos seguimiento con fines publicitarios ni compartimos datos con intermediarios.',
     h12: '12. Cambios en Esta Política',
     p11: 'Podemos actualizar esta política. La versión vigente estará disponible en la App y en nuestro sitio web.',
-    h13: '13. Contacto',
+    h13b: '13. Cómo Eliminar tu Cuenta',
+    p12b: 'Podés eliminar tu cuenta de Padely y todos los datos asociados en cualquier momento, directamente desde la App, siguiendo estos pasos:',
+    li19: 'Iniciá sesión en la App Padely.',
+    li20: 'Andá a tu Perfil (ícono arriba a la derecha en Inicio).',
+    li21: 'Entrá a Configuración.',
+    li22: 'Tocá "Eliminar cuenta" y confirmá la acción.',
+    p12c: 'Al eliminar tu cuenta se borran de forma inmediata e irreversible: tu perfil, historial de análisis de golpes, partidos registrados en el diario y datos de suscripción vinculados a tu identidad. Los registros de transacciones de suscripción pueden conservarse temporalmente cuando la ley lo exige por motivos contables o fiscales, sin vincularse a tu identidad activa en la App.',
+    p12d: 'Si no podés acceder a la App, también podés solicitar la eliminación escribiendo a iovanovichjoaquin@gmail.com desde el email asociado a tu cuenta.',
+    h13: '14. Contacto',
     p12: 'Para consultas sobre privacidad: iovanovichjoaquin@gmail.com',
     privacyLink: 'Privacidad',
     termsLink: 'Términos',
@@ -429,7 +448,15 @@ const T = {
     p10: 'We do not display ads. We do not track for advertising purposes or share data with intermediaries.',
     h12: '12. Changes to This Policy',
     p11: 'We may update this policy. The current version will be available in the App and on our website.',
-    h13: '13. Contact',
+    h13b: '13. How to Delete Your Account',
+    p12b: 'You can delete your Padely account and all associated data at any time, directly from the App, by following these steps:',
+    li19: 'Log in to the Padely App.',
+    li20: 'Go to your Profile (icon at the top right of Home).',
+    li21: 'Open Settings.',
+    li22: 'Tap "Delete account" and confirm.',
+    p12c: 'Deleting your account immediately and irreversibly removes: your profile, shot analysis history, matches logged in the diary, and subscription data tied to your identity. Subscription transaction records may be retained temporarily where required by law for accounting or tax purposes, without being linked to your active identity in the App.',
+    p12d: 'If you cannot access the App, you can also request deletion by emailing iovanovichjoaquin@gmail.com from the email associated with your account.',
+    h13: '14. Contact',
     p12: 'For privacy inquiries: iovanovichjoaquin@gmail.com',
     privacyLink: 'Privacy',
     termsLink: 'Terms',
@@ -483,6 +510,14 @@ function setLang(lang) {
   document.getElementById('p10').textContent = d.p10;
   document.getElementById('h12').textContent = d.h12;
   document.getElementById('p11').textContent = d.p11;
+  document.getElementById('h13b').textContent = d.h13b;
+  document.getElementById('p12b').textContent = d.p12b;
+  document.getElementById('li19').textContent = d.li19;
+  document.getElementById('li20').textContent = d.li20;
+  document.getElementById('li21').textContent = d.li21;
+  document.getElementById('li22').textContent = d.li22;
+  document.getElementById('p12c').textContent = d.p12c;
+  document.getElementById('p12d').innerHTML = d.p12d.replace(/iovanovichjoaquin@gmail\.com/, '<a href="mailto:iovanovichjoaquin@gmail.com" style="color: var(--green); text-decoration: none;">iovanovichjoaquin@gmail.com</a>');
   document.getElementById('h13').textContent = d.h13;
   document.getElementById('p12').textContent = d.p12;
   document.getElementById('privacyLink').textContent = d.privacyLink;
